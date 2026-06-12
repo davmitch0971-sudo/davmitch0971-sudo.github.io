@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AdCreator AI — Architected for Conversion</title>
+
+  <style>
+    :root {
+      --bg-dark: #050509;
+      --bg-card: #0d0d18;
+      --bg-header: #070712;
+      --text-main: #ffffff;
+      --text-muted: #a8a8c0;
+      --accent: #ff2e88;
+      --accent-soft: #ff7ac4;
+      --accent-alt: #7b5cff;
+      --accent-green: #00d27a;
+      --border-subtle: #26263a;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.55);
+    }
+
+    [data-theme="light"] {
+      --bg-dark: #f5f5ff;
+      --bg-card: #ffffff;
+      --bg-header: #ffffff;
+      --text-main: #111122;
+      --text-muted: #555577;
+      --accent: #ff2e88;
+      --accent-soft: #ff7ac4;
+      --accent-alt: #7b5cff;
+      --accent-green: #00b86a;
+      --border-subtle: #d8d8f0;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #181830 0, var(--bg-dark) 45%);
+      color: var(--text-main);
+      line-height: 1.6;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    header {
+      padding: 14px 28px;
+      background: linear-gradient(to right, var(--bg-header), #050509);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-text-main {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .logo-text-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      margin-left: 18px;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s ease, opacity 0.2s ease;
+    }
+
+    nav a:hover {
+      color: var(--accent-soft);
+      opacity: 1;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .toggle-btn {
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      padding: 6px 14px;
+      font-size: 12px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toggle-btn span {
+      font-size: 16px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+      animation: fadeInUp 0.8s ease-out forwards;
+      opacity: 0;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(5,5,15,0.7);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #00ff99;
+      box-shadow: 0 0 8px #00ff99;
+    }
+
+    .hero h1 {
+      font-size: 44px;
+      margin-bottom: 10px;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-gradient {
+      background: linear-gradient(90deg, #ff7ac4, #ff2e88, #7b5cff);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      font-size: 18px;
+      opacity: 0.9;
+      max-width: 640px;
+      margin: 0 auto 24px;
+    }
+
+    .hero-cta {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .hero button,
+    .hero .secondary-btn {
+      border-radius: 999px;
+      padding: 14px 26px;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .hero button {
+      background: linear-gradient(135deg, #ff2e88, #ff7ac4);
+      color: white;
+      box-shadow: 0 12px 30px rgba(255, 46, 136, 0.35);
+    }
+
+    .hero .secondary-btn {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .hero-small {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+
+    .section {
+      max-width: 1000px;
+      margin: auto;
+      padding: 32px 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .section:nth-of-type(2) { animation-delay: 0.15s; }
+    .section:nth-of-type(3) { animation-delay: 0.3s; }
+    .section:nth-of-type(4) { animation-delay: 0.45s; }
+    .section:nth-of-type(5) { animation-delay: 0.6s; }
+    .section:nth-of-type(6) { animation-delay: 0.75s; }
+    .section:nth-of-type(7) { animation-delay: 0.9s; }
+
+    .section h2 {
+      font-size: 24px;
+      text-align: left;
+      margin-bottom: 6px;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    .tri-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .feature-box {
+      background: radial-gradient(circle at top left, rgba(255,46,136,0.12), var(--bg-card));
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .feature-box h3 {
+      margin-top: 0;
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    .feature-box p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 18px;
+    }
+
+    .screenshots-grid img {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      display: block;
+      box-shadow: var(--shadow-soft);
+    }
+
+    @media (max-width: 800px) {
+      .screenshots-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .testimonial {
+      background: var(--bg-card);
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      font-size: 14px;
+    }
+
+    .testimonial strong {
+      display: block;
+      margin-top: 8px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .pricing-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+    }
+
+    @media (max-width: 800px) {
+      .pricing-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pricing-box {
+      background: radial-gradient(circle at top, rgba(123,92,255,0.25), var(--bg-card));
+      padding: 26px;
+      border-radius: 18px;
+      border: 1px solid var(--border-subtle);
+      text-align: center;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pricing-box h3 {
+      margin-top: 0;
+      margin-bottom: 6px;
+    }
+
+    .pricing-box p {
+      margin: 4px 0;
+    }
+
+    .pricing-box .price {
+      font-size: 28px;
+      margin: 8px 0;
+    }
+
+    .pricing-box button {
+      background: linear-gradient(135deg, var(--accent-green), #00b86a);
+      border: none;
+      padding: 14px 30px;
+      font-size: 16px;
+      color: white;
+      border-radius: 999px;
+      cursor: pointer;
+      margin-top: 16px;
+      box-shadow: 0 12px 30px rgba(0, 210, 122, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pricing-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    .pricing-anchor {
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px dashed var(--border-subtle);
+      padding: 18px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .download-section {
+      text-align: center;
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
+      padding: 24px;
+      margin-top: 10px;
+    }
+
+    .download-section a {
+      color: #00c3ff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .faq-item {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      padding: 16px;
+      font-size: 14px;
+    }
+
+    .faq-item h3 {
+      margin: 0 0 6px;
+      font-size: 15px;
+    }
+
+    .who-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .who-box {
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      padding: 16px;
+      font-size: 14px;
+    }
+
+    .who-box ul {
+      padding-left: 18px;
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    footer {
+      text-align: center;
+      padding: 26px;
+      margin-top: 40px;
+      background: #050509;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes triPulse {
+      0% { transform: scale(1) translateY(0); opacity: 0.9; }
+      50% { transform: scale(1.06) translateY(-1px); opacity: 1; }
+      100% { transform: scale(1) translateY(0); opacity: 0.9; }
+    }
+
+    @keyframes triOrbit {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <!-- Tri‑Axis Architect Sigil -->
+    <svg width="34" height="34" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="triGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ff7ac4"/>
+          <stop offset="50%" stop-color="#ff2e88"/>
+          <stop offset="100%" stop-color="#7b5cff"/>
+        </linearGradient>
+      </defs>
+      <circle cx="32" cy="32" r="26" fill="#050509" stroke="url(#triGrad)" stroke-width="2.5"/>
+      <g style="animation: triOrbit 14s linear infinite;">
+        <path d="M32 14 L46 42 L18 42 Z" fill="url(#triGrad)" opacity="0.9"/>
+      </g>
+      <circle cx="32" cy="24" r="3.2" fill="#ffffff" style="animation: triPulse 2.4s ease-in-out infinite;"/>
+      <circle cx="40" cy="38" r="3.2" fill="#ffffff" style="animation: triPulse 2.4s ease-in-out infinite 0.2s;"/>
+      <circle cx="24" cy="38" r="3.2" fill="#ffffff" style="animation: triPulse 2.4s ease-in-out infinite 0.4s;"/>
+    </svg>
+
+    <div>
+      <div class="logo-text-main">AdCreator AI</div>
+      <div class="logo-text-sub">Offer • Audience • Message</div>
+    </div>
+  </div>
+
+  <div class="nav-right">
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#screenshots">Screenshots</a>
+      <a href="#testimonials">Proof</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://davmitch0971-sudo.github.io/adcreator-ai/app/login">Login</a>
+      <a href="https://davmitch0971-sudo.github.io/adcreator-ai/app/profile">My Account</a>
+    </nav>
+    <button class="toggle-btn" id="themeToggle">
+      <span>🌙</span> <span id="themeLabel">Dark</span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    Live — operators are generating campaigns right now.
+  </div>
+
+  <h1>
+    Turn raw ideas into <span class="hero-gradient">ready‑to‑launch ad systems</span>.
+  </h1>
+  <p>
+    AdCreator AI doesn’t just spit out copy — it structures your offer, audience, and message into high‑converting campaigns in seconds.
+  </p>
+
+  <div class="hero-cta">
+    <a href="https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-6AV8921705660221SNIUXYKQ">
+      <button>
+        Start AdCreator — $9.99/mo
+      </button>
+    </a>
+
+    <a href="#screenshots" class="secondary-btn">
+      See the interface
+    </a>
+  </div>
+
+  <div class="hero-small">
+    No contracts. Cancel anytime. Instant access after payment.
+  </div>
+</section>
+
+<section class="section" id="features">
+  <h2>Core Capabilities</h2>
+  <div class="section-subtitle">
+    The tri‑axis of performance: Offer • Audience • Message — generated, aligned, and deployed in under a minute.
+  </div>
+
+  <div class="tri-grid">
+    <div class="feature-box">
+      <h3>⚡ Instant Campaign Generation</h3>
+      <p>Input your product and niche — AdCreator returns hooks, angles, scripts, and captions mapped to your audience.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>🎯 Audience‑Aligned Messaging</h3>
+      <p>Beginner, intermediate, or advanced audiences — tone and complexity adapt automatically to who you’re selling to.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>📱 Platform‑Specific Outputs</h3>
+      <p>Generate formats for TikTok, Reels, Shorts, Facebook ads, carousels, and more with one click.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>🧠 Structured Ad Logic</h3>
+      <p>Hooks, offers, objections, proof, and CTAs are arranged into proven ad frameworks — not random text blobs.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>📝 Script + Caption Bundles</h3>
+      <p>Get video scripts, captions, and headline variations in one unified output so you can deploy fast.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>📂 Save & Reuse Angles</h3>
+      <p>Reuse winning angles and campaigns so you never start from scratch again.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="architecture">
+  <h2>Built Like a System, Not a Toy</h2>
+  <div class="section-subtitle">
+    Under the hood, AdCreator follows a Source‑grade architecture: Primordial → Structural → Cognitive → Energetic → Manifested.
+  </div>
+
+  <div class="tri-grid">
+    <div class="feature-box">
+      <h3>🜂 Primordial — Identity</h3>
+      <p>Every campaign starts from a clear core: who you are, who you serve, and what change you create.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>🜁 Structural — Framework</h3>
+      <p>Ad frameworks are baked in: problem → agitation → solution, before/after bridge, testimonial‑driven, and more.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>🜃 Cognitive — Intelligence</h3>
+      <p>AdCreator reasons about your offer and audience, then generates messaging that feels intentional, not generic.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>🜄 Energetic — Motion</h3>
+      <p>Scripts are written with pacing, tension, and release — built to hold attention from first second to last.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>◎ Manifested — Output</h3>
+      <p>Final outputs are clean, structured, and ready to paste into your ad manager or editor.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>♜ Operator‑Friendly</h3>
+      <p>Built for creators, media buyers, and founders who care about performance, not fluff.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="screenshots">
+  <h2>Interface Preview</h2>
+  <div class="section-subtitle">
+    A focused dashboard: one place to architect, generate, and refine your ad systems.
+  </div>
+
+  <div class="screenshots-grid">
+    <img src="https://via.placeholder.com/1000x520/181828/ffffff?text=AdCreator+Dashboard+%E2%80%94+Campaign+Overview" alt="Dashboard Screenshot">
+    <img src="https://via.placeholder.com/900x520/181828/ffffff?text=Ad+Generator+%E2%80%94+Offer+%2F+Audience+%2F+Message" alt="Ad Generator Screenshot">
+  </div>
+</section>
+
+<section class="section" id="testimonials">
+  <h2>Proof from Operators</h2>
+  <div class="section-subtitle">
+    Not “inspiration.” Not “ideas.” Actual performance improvements from people who run ads for a living.
+  </div>
+
+  <div class="testimonials">
+    <div class="testimonial">
+      “I used to burn half a day trying to write one decent script. Now I spin up 5 angles in 10 minutes and test them. One of them became my best‑performing TikTok ad this year.”
+      <strong>Sarah M. — E‑com store owner</strong>
+    </div>
+
+    <div class="testimonial">
+      “AdCreator paid for itself on day one. The first campaign I generated dropped my CPA by 23% compared to my old control.”
+      <strong>Jason R. — Media buyer</strong>
+    </div>
+
+    <div class="testimonial">
+      “Most AI tools give you fluff. This one gives you structure. It feels like it actually understands how ads work.”
+      <strong>Marcus T. — Solo creator</strong>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <h2>Pricing</h2>
+  <div class="section-subtitle">
+    One main plan. No tiers. No bullshit. Either it makes you money or you cancel.
+  </div>
+
+  <div class="pricing-layout">
+    <div class="pricing-box">
+      <h3>AdCreator AI — Full Access</h3>
+      <p class="price">$9.99 / month</p>
+      <p>Unlimited ad generation • Full dashboard • All features unlocked</p>
+      <p>Perfect for creators, small businesses, and media buyers.</p>
+
+      <a href="https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-6AV8921705660221SNIUXYKQ">
+        <button>
+          Subscribe with PayPal
+        </button>
+      </a>
+
+      <div class="pricing-note">
+        No contracts. Cancel anytime. If it doesn’t help you, you shouldn’t keep it.
+      </div>
+    </div>
+
+    <div class="pricing-anchor">
+      <strong>Why only one plan?</strong>
+      <p>
+        Because complexity kills action. You don’t need 3 tiers and 9 options — you need one decision:
+        “Does this help me make more money from my ads?”
+      </p>
+      <p>
+        If yes, $9.99/mo is a rounding error. If no, you cancel. Simple.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Who This Is For / Not For</h2>
+  <div class="who-grid">
+    <div class="who-box">
+      <h3>✅ AdCreator is for you if…</h3>
+      <ul>
+        <li>You run or want to run paid ads.</li>
+        <li>You hate staring at a blank page trying to write scripts.</li>
+        <li>You want multiple angles fast so you can test, not guess.</li>
+        <li>You care about performance more than “pretty dashboards.”</li>
+      </ul>
+    </div>
+
+    <div class="who-box">
+      <h3>❌ AdCreator is not for you if…</h3>
+      <ul>
+        <li>You never plan to run ads or create content.</li>
+        <li>You want a magic button that prints money with zero effort.</li>
+        <li>You refuse to test, iterate, or learn what works.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <h2>FAQ</h2>
+  <div class="section-subtitle">
+    Clear answers so you can decide fast.
+  </div>
+
+  <div class="faq-grid">
+    <div class="faq-item">
+      <h3>How do I access AdCreator after subscribing?</h3>
+      <p>
+        After you subscribe with PayPal, you’ll be able to download the app from the link below and use your subscription email to access the full version.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Can I cancel anytime?</h3>
+      <p>
+        Yes. You control your subscription directly in PayPal. If it stops being useful, you cancel. No emails, no support tickets, no games.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Does AdCreator replace a media buyer?</h3>
+      <p>
+        No. It gives you structured, high‑quality inputs. You still decide budgets, targeting, and strategy — but with better creative to test.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3>What if I’m brand new to ads?</h3>
+      <p>
+        Then AdCreator is your shortcut. You don’t need to know every framework — the system gives you scripts and angles you can deploy immediately.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Download</h2>
+  <div class="download-section">
+    <p>
+      After subscribing, download the latest version of AdCreator AI here:
+    </p>
+    <p>
+      <a href="https://github.com/davmitch0971-sudo/adcreator-ai/releases">
+        Download AdCreator AI from GitHub Releases
+      </a>
+    </p>
+  </div>
+</section>
+
+<footer>
+  © 2026 AdCreator AI — Architected for Conversion
+</footer>
+
+<script>
+  const themeToggle = document.getElementById('themeToggle');
+  const themeLabel = document.getElementById('themeLabel');
+
+  function setTheme(mode) {
+    document.documentElement.setAttribute('data-theme', mode);
+    if (mode === 'dark') {
+      themeLabel.textContent = 'Dark';
+      themeToggle.firstElementChild.textContent = '🌙';
+    } else {
+      themeLabel.textContent = 'Light';
+      themeToggle.firstElementChild.textContent = '☀️';
+    }
+    localStorage.setItem('adcreator-theme', mode);
+  }
+
+  const savedTheme = localStorage.getItem('adcreator-theme');
+  if (savedTheme === 'light' || savedTheme === 'dark') {
+    setTheme(savedTheme);
+  } else {
+    setTheme('dark');
+  }
+
+  themeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    setTheme(current === 'dark' ? 'light' : 'dark');
+  });
+</script>
+
+</body>
+</html>
